@@ -32,7 +32,14 @@ properties:
     properties:
       backing:
         type: string
-        enum: [raw]
+        enum: 
+        - raw
+        - lv
+      logicalvolume:
+          type: object
+          properties:
+            lv: {type: string}
+            vg: {type: string}
       partitions:
         type: object
         properties:

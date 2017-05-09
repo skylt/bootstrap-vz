@@ -134,6 +134,7 @@ properties:
     type: object
     properties:
       backing: {type: string}
+      logicalvolume: {type: object}
       partitions:
         type: object
         oneOf:
