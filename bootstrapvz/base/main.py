@@ -22,6 +22,10 @@ def main():
     from manifest import Manifest
     manifest = Manifest(path=opts['MANIFEST'])
 
+    # Set-up Architecture independent path
+    if "usr/sbin" not in os.environ["PATH"]:
+        os.environ["PATH"] += os.pathsep + os.pathsep.join(["/usr/sbin", "/sbin", "/bin"])
+
     # Everything has been set up, begin the bootstrapping process
     run(manifest,
         debug=opts['--debug'],
