@@ -53,11 +53,11 @@ class CreateVagrantUser(Task):
 
     @classmethod
     def run(cls, info):
-        from bootstrapvz.common.tools import log_check_call
-        log_check_call(['chroot', info.root,
-                        'useradd',
-                        '--create-home', '--shell', '/bin/bash',
-                        'vagrant'])
+        from bootstrapvz.common.tools import log_check_call_chroot
+        log_check_call_chroot(['chroot', info.root,
+                               'useradd',
+                               '--create-home', '--shell', '/bin/bash',
+                               'vagrant'])
 
 
 class PasswordlessSudo(Task):
@@ -97,10 +97,10 @@ class AddInsecurePublicKey(Task):
         os.chmod(authorized_keys_path, stat.S_IRUSR | stat.S_IWUSR)
 
         # We can't do this directly with python, since getpwnam gets its info from the host
-        from bootstrapvz.common.tools import log_check_call
-        log_check_call(['chroot', info.root,
-                        'chown', 'vagrant:vagrant',
-                        '/home/vagrant/.ssh', '/home/vagrant/.ssh/authorized_keys'])
+        from bootstrapvz.common.tools import log_check_call_chroot
+        log_check_call_chroot(['chroot', info.root,
+                               'chown', 'vagrant:vagrant',
+                               '/home/vagrant/.ssh', '/home/vagrant/.ssh/authorized_keys'])
 
 
 class SetRootPassword(Task):
@@ -109,8 +109,8 @@ class SetRootPassword(Task):
 
     @classmethod
     def run(cls, info):
-        from bootstrapvz.common.tools import log_check_call
-        log_check_call(['chroot', info.root, 'chpasswd'], 'root:vagrant')
+        from bootstrapvz.common.tools import log_check_call_chroot
+        log_check_call_chroot(['chroot', info.root, 'chpasswd'], 'root:vagrant')
 
 
 class PackageBox(Task):

@@ -2,7 +2,7 @@ from bootstrapvz.base import Task
 from bootstrapvz.common import phases
 from bootstrapvz.common.tasks import apt
 from bootstrapvz.common.tasks import packages
-from bootstrapvz.common.tools import log_check_call
+from bootstrapvz.common.tools import log_check_call, log_check_call_chroot
 import os
 
 
@@ -16,7 +16,7 @@ class AddGoogleCloudRepoKey(Task):
     def run(cls, info):
         key_file = os.path.join(info.root, 'google.gpg.key')
         log_check_call(['wget', 'https://packages.cloud.google.com/apt/doc/apt-key.gpg', '-O', key_file])
-        log_check_call(['chroot', info.root, 'apt-key', 'add', 'google.gpg.key'])
+        log_check_call_chroot(['chroot', info.root, 'apt-key', 'add', 'google.gpg.key'])
         os.remove(key_file)
 
 

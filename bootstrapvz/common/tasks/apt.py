@@ -1,6 +1,6 @@
 from bootstrapvz.base import Task
 from bootstrapvz.common import phases
-from bootstrapvz.common.tools import log_check_call
+from bootstrapvz.common.tools import log_check_call_chroot
 import locale
 import logging
 import os
@@ -193,8 +193,8 @@ class AptUpdate(Task):
 
     @classmethod
     def run(cls, info):
-        log_check_call(['chroot', info.root,
-                        'apt-get', 'update'])
+        log_check_call_chroot(['chroot', info.root,
+                               'apt-get', 'update'])
 
 
 class AptUpgrade(Task):
@@ -206,15 +206,15 @@ class AptUpgrade(Task):
     def run(cls, info):
         from subprocess import CalledProcessError
         try:
-            log_check_call(['chroot', info.root,
-                            'apt-get', 'install',
-                                       '--fix-broken',
-                                       '--no-install-recommends',
-                                       '--assume-yes'])
-            log_check_call(['chroot', info.root,
-                            'apt-get', 'upgrade',
-                                       '--no-install-recommends',
-                                       '--assume-yes'])
+            log_check_call_chroot(['chroot', info.root,
+                                   'apt-get', 'install',
+                                              '--fix-broken',
+                                              '--no-install-recommends',
+                                              '--assume-yes'])
+            log_check_call_chroot(['chroot', info.root,
+                                   'apt-get', 'upgrade',
+                                              '--no-install-recommends',
+                                              '--assume-yes'])
         except CalledProcessError as e:
             if e.returncode == 100:
                 msg = ('apt exited with status code 100. '
@@ -230,10 +230,10 @@ class PurgeUnusedPackages(Task):
 
     @classmethod
     def run(cls, info):
-        log_check_call(['chroot', info.root,
-                        'apt-get', 'autoremove',
-                                   '--purge',
-                                   '--assume-yes'])
+        log_check_call_chroot(['chroot', info.root,
+                               'apt-get', 'autoremove',
+                                          '--purge',
+                                          '--assume-yes'])
 
 
 class AptClean(Task):
@@ -242,8 +242,8 @@ class AptClean(Task):
 
     @classmethod
     def run(cls, info):
-        log_check_call(['chroot', info.root,
-                        'apt-get', 'clean'])
+        log_check_call_chroot(['chroot', info.root,
+                               'apt-get', 'clean'])
 
         lists = os.path.join(info.root, 'var/lib/apt/lists')
         for list_file in [os.path.join(lists, f) for f in os.listdir(lists)]:

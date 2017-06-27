@@ -3,7 +3,7 @@ from bootstrapvz.common import phases
 from bootstrapvz.common.tasks import grub
 from . import assets
 import os
-from bootstrapvz.common.tools import log_check_call
+from bootstrapvz.common.tools import log_check_call_chroot
 
 
 class AddXenGrubConsoleOutputDevice(Task):
@@ -23,7 +23,7 @@ class UpdateGrubConfig(Task):
 
     @classmethod
     def run(cls, info):
-        log_check_call(['chroot', info.root, 'update-grub'])
+        log_check_call_chroot(['chroot', info.root, 'update-grub'])
 
 
 class CreatePVGrubCustomRule(Task):
@@ -80,5 +80,4 @@ class LinkGrubConfig(Task):
 
     @classmethod
     def run(cls, info):
-        log_check_call(['chroot', info.root,
-                        'ln', '--symbolic', '/boot/grub/grub.cfg', '/boot/grub/menu.lst'])
+        log_check_call_chroot(['chroot', info.root, 'ln', '--symbolic', '/boot/grub/grub.cfg', '/boot/grub/menu.lst'])

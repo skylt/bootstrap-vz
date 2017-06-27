@@ -1,6 +1,6 @@
 from bootstrapvz.base import Task
 from .. import phases
-from ..tools import log_check_call
+from ..tools import log_check_call_chroot
 import filesystem
 import kernel
 from bootstrapvz.base.fs import partitionmaps
@@ -28,8 +28,8 @@ class ConfigureExtlinux(Task):
         from bootstrapvz.common.releases import squeeze
         if info.manifest.release == squeeze:
             # On squeeze /etc/default/extlinux is generated when running extlinux-update
-            log_check_call(['chroot', info.root,
-                            'extlinux-update'])
+            log_check_call_chroot(['chroot', info.root,
+                                   'extlinux-update'])
         from bootstrapvz.common.tools import sed_i
         extlinux_def = os.path.join(info.root, 'etc/default/extlinux')
         sed_i(extlinux_def, r'^EXTLINUX_PARAMETERS="([^"]+)"$',
@@ -47,15 +47,15 @@ class InstallExtlinux(Task):
             bootloader = '/usr/lib/syslinux/gptmbr.bin'
         else:
             bootloader = '/usr/lib/extlinux/mbr.bin'
-        log_check_call(['chroot', info.root,
-                        'dd', 'bs=440', 'count=1',
-                        'if=' + bootloader,
-                        'of=' + info.volume.device_path])
-        log_check_call(['chroot', info.root,
-                        'extlinux',
-                        '--install', '/boot/extlinux'])
-        log_check_call(['chroot', info.root,
-                        'extlinux-update'])
+        log_check_call_chroot(['chroot', info.root,
+                               'dd', 'bs=440', 'count=1',
+                               'if=' + bootloader,
+                               'of=' + info.volume.device_path])
+        log_check_call_chroot(['chroot', info.root,
+                               'extlinux',
+                               '--install', '/boot/extlinux'])
+        log_check_call_chroot(['chroot', info.root,
+                               'extlinux-update'])
 
 
 class ConfigureExtlinuxJessie(Task):
@@ -105,10 +105,10 @@ class InstallExtlinuxJessie(Task):
             bootloader = '/usr/lib/EXTLINUX/gptmbr.bin'
         else:
             bootloader = '/usr/lib/EXTLINUX/mbr.bin'
-        log_check_call(['chroot', info.root,
-                        'dd', 'bs=440', 'count=1',
-                        'if=' + bootloader,
-                        'of=' + info.volume.device_path])
-        log_check_call(['chroot', info.root,
-                        'extlinux',
-                        '--install', '/boot/extlinux'])
+        log_check_call_chroot(['chroot', info.root,
+                               'dd', 'bs=440', 'count=1',
+                               'if=' + bootloader,
+                               'of=' + info.volume.device_path])
+        log_check_call_chroot(['chroot', info.root,
+                               'extlinux',
+                               '--install', '/boot/extlinux'])

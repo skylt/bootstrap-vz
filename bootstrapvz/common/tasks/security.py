@@ -8,5 +8,5 @@ class EnableShadowConfig(Task):
 
     @classmethod
     def run(cls, info):
-        from ..tools import log_check_call
-        log_check_call(['chroot', info.root, 'shadowconfig', 'on'])
+        from ..tools import log_check_call_chroot
+        log_check_call_chroot(['chroot', info.root, 'shadowconfig', 'on'])

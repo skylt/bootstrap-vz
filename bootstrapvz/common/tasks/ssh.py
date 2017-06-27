@@ -1,6 +1,6 @@
 from bootstrapvz.base import Task
 from .. import phases
-from ..tools import log_check_call
+from ..tools import log_check_call_chroot
 import os.path
 from . import assets
 import initd
@@ -26,8 +26,8 @@ class AddSSHKeyGeneration(Task):
         install = info.initd['install']
         from subprocess import CalledProcessError
         try:
-            log_check_call(['chroot', info.root,
-                            'dpkg-query', '-W', 'openssh-server'])
+            log_check_call_chroot(['chroot', info.root,
+                                   'dpkg-query', '-W', 'openssh-server'])
             from bootstrapvz.common.releases import squeeze
             if info.manifest.release == squeeze:
                 install['generate-ssh-hostkeys'] = os.path.join(init_scripts_dir, 'squeeze/generate-ssh-hostkeys')

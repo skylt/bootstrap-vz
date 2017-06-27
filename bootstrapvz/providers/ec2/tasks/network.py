@@ -97,7 +97,7 @@ class InstallEnhancedNetworking(Task):
         import urllib
         urllib.urlretrieve(drivers_url, archive)
 
-        from bootstrapvz.common.tools import log_check_call
+        from bootstrapvz.common.tools import log_check_call, log_check_call_chroot
         log_check_call(['tar', '--ungzip',
                                '--extract',
                                '--file', archive,
@@ -118,9 +118,9 @@ AUTOINSTALL="yes"
 
         for task in ['add', 'build', 'install']:
             # Invoke DKMS task using specified kernel module (-m) and version (-v)
-            log_check_call(['chroot', info.root,
-                            'dkms', task, '-m', 'ixgbevf', '-v', version, '-k',
-                            info.kernel_version])
+            log_check_call_chroot(['chroot', info.root,
+                                   'dkms', task, '-m', 'ixgbevf', '-v', version, '-k',
+                                   info.kernel_version])
 
 
 class InstallENANetworking(Task):
@@ -135,7 +135,7 @@ class InstallENANetworking(Task):
         module_path = os.path.join(info.root, 'usr', 'src',
                                    'amzn-drivers-%s' % (version))
 
-        from bootstrapvz.common.tools import log_check_call
+        from bootstrapvz.common.tools import log_check_call, log_check_call_chroot
         log_check_call(['git', 'clone', drivers_url, module_path])
 
         with open(os.path.join(module_path, 'dkms.conf'), 'w') as dkms_conf:
@@ -152,6 +152,6 @@ AUTOINSTALL="yes"
 
         for task in ['add', 'build', 'install']:
             # Invoke DKMS task using specified kernel module (-m) and version (-v)
-            log_check_call(['chroot', info.root,
-                            'dkms', task, '-m', 'amzn-drivers', '-v', version,
-                            '-k', info.kernel_version])
+            log_check_call_chroot(['chroot', info.root,
+                                   'dkms', task, '-m', 'amzn-drivers', '-v', version,
+                                   '-k', info.kernel_version])

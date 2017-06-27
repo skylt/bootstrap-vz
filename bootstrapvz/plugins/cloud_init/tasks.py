@@ -1,6 +1,6 @@
 from bootstrapvz.base import Task
 from bootstrapvz.common import phases
-from bootstrapvz.common.tools import log_check_call
+from bootstrapvz.common.tools import log_check_call_chroot
 from bootstrapvz.common.tasks import apt
 from bootstrapvz.common.tasks import locale
 import logging
@@ -73,7 +73,7 @@ class SetMetadataSource(Task):
                 logging.getLogger(__name__).warn(msg)
                 return
         sources = "cloud-init    cloud-init/datasources    multiselect    " + sources
-        log_check_call(['chroot', info.root, 'debconf-set-selections'], sources)
+        log_check_call_chroot(['chroot', info.root, 'debconf-set-selections'], sources)
 
 
 class DisableModules(Task):

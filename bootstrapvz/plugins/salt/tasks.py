@@ -1,7 +1,7 @@
 from bootstrapvz.base import Task
 from bootstrapvz.common import phases
 from bootstrapvz.common.tasks import packages
-from bootstrapvz.common.tools import log_check_call
+from bootstrapvz.common.tools import log_check_call_chroot
 from bootstrapvz.common.tools import sed_i
 import os
 import urllib
@@ -44,7 +44,7 @@ class BootstrapSaltMinion(Task):
         bootstrap_command.append(install_source)
         if install_source == 'git' and ('version' in info.manifest.plugins['salt']):
             bootstrap_command.append(info.manifest.plugins['salt']['version'])
-        log_check_call(bootstrap_command)
+        log_check_call_chroot(bootstrap_command)
 
 
 class SetSaltGrains(Task):

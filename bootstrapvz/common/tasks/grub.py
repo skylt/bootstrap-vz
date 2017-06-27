@@ -1,7 +1,7 @@
 from bootstrapvz.base import Task
 from ..exceptions import TaskError
 from .. import phases
-from ..tools import log_check_call
+from ..tools import log_check_call_chroot, log_check_call
 import filesystem
 import kernel
 from bootstrapvz.base.fs import partitionmaps
@@ -317,8 +317,8 @@ class InstallGrub_1_99(Task):
                                                  idx=idx + 1))
 
             # Install grub
-            log_check_call(['chroot', info.root, 'grub-install', device_path])
-            log_check_call(['chroot', info.root, 'update-grub'])
+            log_check_call_chroot(['chroot', info.root, 'grub-install', device_path])
+            log_check_call_chroot(['chroot', info.root, 'update-grub'])
         finally:
             with unmounted(info.volume):
                 info.volume.unlink_dm_node()
@@ -335,5 +335,5 @@ class InstallGrub_2(Task):
 
     @classmethod
     def run(cls, info):
-        log_check_call(['chroot', info.root, 'grub-install', info.volume.device_path])
-        log_check_call(['chroot', info.root, 'update-grub'])
+        log_check_call_chroot(['chroot', info.root, 'grub-install', info.volume.device_path])
+        log_check_call_chroot(['chroot', info.root, 'update-grub'])

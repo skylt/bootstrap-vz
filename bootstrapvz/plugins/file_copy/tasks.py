@@ -6,20 +6,20 @@ import shutil
 
 
 def modify_path(info, path, entry):
-    from bootstrapvz.common.tools import log_check_call
+    from bootstrapvz.common.tools import log_check_call_chroot
     if 'permissions' in entry:
         # We wrap the permissions string in str() in case
         #  the user specified a numeric bitmask
         chmod_command = ['chroot', info.root, 'chmod', str(entry['permissions']), path]
-        log_check_call(chmod_command)
+        log_check_call_chroot(chmod_command)
 
     if 'owner' in entry:
         chown_command = ['chroot', info.root, 'chown', entry['owner'], path]
-        log_check_call(chown_command)
+        log_check_call_chroot(chown_command)
 
     if 'group' in entry:
         chgrp_command = ['chroot', info.root, 'chgrp', entry['group'], path]
-        log_check_call(chgrp_command)
+        log_check_call_chroot(chgrp_command)
 
 
 class MkdirCommand(Task):
@@ -28,11 +28,11 @@ class MkdirCommand(Task):
 
     @classmethod
     def run(cls, info):
-        from bootstrapvz.common.tools import log_check_call
+        from bootstrapvz.common.tools import log_check_call_chroot
 
         for dir_entry in info.manifest.plugins['file_copy']['mkdirs']:
             mkdir_command = ['chroot', info.root, 'mkdir', '-p', dir_entry['dir']]
-            log_check_call(mkdir_command)
+            log_check_call_chroot(mkdir_command)
             modify_path(info, dir_entry['dir'], dir_entry)
 
 

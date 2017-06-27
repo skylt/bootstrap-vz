@@ -18,8 +18,8 @@ class PipInstallCommand(Task):
 
     @classmethod
     def run(cls, info):
-        from bootstrapvz.common.tools import log_check_call
+        from bootstrapvz.common.tools import log_check_call_chroot
         packages = info.manifest.plugins['pip_install']['packages']
         pip_install_command = ['chroot', info.root, 'pip', 'install']
         pip_install_command.extend(packages)
-        log_check_call(pip_install_command)
+        log_check_call_chroot(pip_install_command)

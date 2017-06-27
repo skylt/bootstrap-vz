@@ -29,7 +29,7 @@ class Waagent(Task):
 
     @classmethod
     def run(cls, info):
-        from bootstrapvz.common.tools import log_check_call
+        from bootstrapvz.common.tools import log_check_call, log_check_call_chroot
         import os
         waagent_version = info.manifest.provider['waagent']['version']
         waagent_file = 'WALinuxAgent-' + waagent_version + '.tar.gz'
@@ -39,9 +39,9 @@ class Waagent(Task):
         log_check_call(['tar', 'xaf', os.path.join(info.root, waagent_file), '-C', waagent_directory])
         os.remove(os.path.join(info.root, waagent_file))
         waagent_script = '/root/WALinuxAgent-WALinuxAgent-' + waagent_version + '/waagent'
-        log_check_call(['chroot', info.root, 'cp', waagent_script, '/usr/sbin/waagent'])
-        log_check_call(['chroot', info.root, 'chmod', '755', '/usr/sbin/waagent'])
-        log_check_call(['chroot', info.root, 'waagent', '-install'])
+        log_check_call_chroot(['chroot', info.root, 'cp', waagent_script, '/usr/sbin/waagent'])
+        log_check_call_chroot(['chroot', info.root, 'chmod', '755', '/usr/sbin/waagent'])
+        log_check_call_chroot(['chroot', info.root, 'waagent', '-install'])
         if info.manifest.provider['waagent'].get('conf', False):
             if os.path.isfile(info.manifest.provider['waagent']['conf']):
                 log_check_call(['cp', info.manifest.provider['waagent']['conf'],

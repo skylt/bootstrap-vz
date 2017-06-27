@@ -2,7 +2,7 @@ from bootstrapvz.base import Task
 from bootstrapvz.common import phases
 from bootstrapvz.common.tasks import initd
 from bootstrapvz.common.tasks import packages
-from bootstrapvz.common.tools import log_check_call
+from bootstrapvz.common.tools import log_check_call_chroot
 from bootstrapvz.common.tools import rel_path
 from bootstrapvz.common.tools import sed_i
 import os
@@ -55,4 +55,4 @@ class InstallExpandRootScripts(Task):
               'ExecStart=/usr/bin/expand-root.sh %s' % opts)
 
         # Enable systemd service
-        log_check_call(['chroot', info.root,  'systemctl', 'enable', 'expand-root.service'])
+        log_check_call_chroot(['chroot', info.root,  'systemctl', 'enable', 'expand-root.service'])

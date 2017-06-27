@@ -1,6 +1,6 @@
 from bootstrapvz.base import Task
 from .. import phases
-from ..tools import log_check_call
+from ..tools import log_check_call_chroot
 from . import assets
 import os.path
 
@@ -22,15 +22,15 @@ class InstallInitScripts(Task):
             copy(src, dst)
             os.chmod(dst, rwxr_xr_x)
             if info.manifest.release > jessie:
-                log_check_call(['chroot', info.root, 'systemctl', 'enable', name])
+                log_check_call_chroot(['chroot', info.root, 'systemctl', 'enable', name])
             else:
-                log_check_call(['chroot', info.root, 'insserv', '--default', name])
+                log_check_call_chroot(['chroot', info.root, 'insserv', '--default', name])
 
         for name in info.initd['disable']:
             if info.manifest.release > jessie:
-                log_check_call(['chroot', info.root, 'systemctl', 'mask', name])
+                log_check_call_chroot(['chroot', info.root, 'systemctl', 'mask', name])
             else:
-                log_check_call(['chroot', info.root, 'insserv', '--remove', name])
+                log_check_call_chroot(['chroot', info.root, 'insserv', '--remove', name])
 
 
 class AddExpandRoot(Task):

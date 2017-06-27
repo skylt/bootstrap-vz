@@ -52,8 +52,8 @@ class InstallGuestAdditions(Task):
 
     @classmethod
     def run(cls, info):
-        from bootstrapvz.common.tools import log_call, log_check_call
-        for line in log_check_call(['chroot', info.root, 'apt-cache', 'show', info.kernel['headers_pkg']]):
+        from bootstrapvz.common.tools import log_check_call_chroot, log_call_chroot
+        for line in log_check_call_chroot(['chroot', info.root, 'apt-cache', 'show', info.kernel['headers_pkg']]):
             key, value = line.split(':')
             if key.strip() == 'Depends':
                 kernel_version = value.strip().split('linux-headers-')[-1]
@@ -77,10 +77,10 @@ class InstallGuestAdditions(Task):
             f.write(install_wrapper + '\n')
 
         # Don't check the return code of the scripts here, because 1 not necessarily means they have failed
-        log_call(['chroot', info.root, 'bash', '/' + install_wrapper_name])
+        log_call_chroot(['chroot', info.root, 'bash', '/' + install_wrapper_name])
 
         # VBoxService process could be running, as it is not affected by DisableDaemonAutostart
-        log_call(['chroot', info.root, 'service', 'vboxadd-service', 'stop'])
+        log_call_chroot(['chroot', info.root, 'service', 'vboxadd-service', 'stop'])
         root.remove_mount(mount_path)
         os.rmdir(mount_path)
         os.remove(install_wrapper_path)

@@ -1,6 +1,25 @@
 import os
 
 
+def append_default_debian_path(env=None):
+    if "usr/sbin" not in os.environ["PATH"]:
+        if env is None or env is os.environ:
+            env = os.environ.copy()
+        env['PATH'] += os.pathsep + os.pathsep.join(["/usr/local/sbin", "/usr/local/bin",
+                                                     "/usr/sbin", "/usr/bin", "/sbin", "/bin"])
+        return env
+
+
+def log_check_call_chroot(command, stdin=None, env=None, shell=False, cwd=None):
+    env = append_default_debian_path(env)
+    log_check_call(command, stdin, env, shell, cwd)
+
+
+def log_call_chroot(command, stdin=None, env=None, shell=False, cwd=None):
+    env = append_default_debian_path(env)
+    log_call(command, stdin, env, shell, cwd)
+
+
 def log_check_call(command, stdin=None, env=None, shell=False, cwd=None):
     status, stdout, stderr = log_call(command, stdin, env, shell, cwd)
     from subprocess import CalledProcessError
@@ -20,12 +39,6 @@ def log_call(command, stdin=None, env=None, shell=False, cwd=None):
     from multiprocessing.dummy import Pool as ThreadPool
     from os.path import realpath
 
-    # Update PATH if command is chroot
-    if command[0] == 'chroot':
-        if "usr/sbin" not in os.environ["PATH"]:
-            if env is None or env is os.environ:
-                env = os.environ.copy()
-            env['PATH'] += os.pathsep + os.pathsep.join(["/usr/sbin", "/sbin", "/bin"])
     command_log = realpath(command[0]).replace('/', '.')
     log = logging.getLogger(__name__ + command_log)
     if type(command) is list:

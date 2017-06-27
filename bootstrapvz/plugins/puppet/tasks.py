@@ -73,9 +73,9 @@ class ApplyPuppetManifest(Task):
         copy(pp_manifest, manifest_dst)
 
         manifest_path = os.path.join('/', manifest_rel_dst)
-        from bootstrapvz.common.tools import log_check_call
-        log_check_call(['chroot', info.root,
-                        'puppet', 'apply', manifest_path])
+        from bootstrapvz.common.tools import log_check_call_chroot
+        log_check_call_chroot(['chroot', info.root,
+                               'puppet', 'apply', manifest_path])
         os.remove(manifest_dst)
 
         hosts_path = os.path.join(info.root, 'etc/hosts')

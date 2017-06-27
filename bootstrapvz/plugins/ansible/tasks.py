@@ -34,7 +34,7 @@ class RunAnsiblePlaybook(Task):
 
     @classmethod
     def run(cls, info):
-        from bootstrapvz.common.tools import log_check_call
+        from bootstrapvz.common.tools import log_check_call_chroot
 
         # Extract playbook and directory
         playbook = info.manifest.plugins['ansible']['playbook']
@@ -92,5 +92,5 @@ class RunAnsiblePlaybook(Task):
             cmd.extend(opt_flags)
 
         # Run and remove the inventory file
-        log_check_call(cmd, cwd=playbook_dir)
+        log_check_call_chroot(cmd, cwd=playbook_dir)
         os.remove(inventory)

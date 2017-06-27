@@ -44,11 +44,11 @@ class CreateAdminUser(Task):
 
     @classmethod
     def run(cls, info):
-        from bootstrapvz.common.tools import log_check_call
-        log_check_call(['chroot', info.root,
-                        'useradd',
-                        '--create-home', '--shell', '/bin/bash',
-                        info.manifest.plugins['admin_user']['username']])
+        from bootstrapvz.common.tools import log_check_call_chroot
+        log_check_call_chroot(['chroot', info.root,
+                               'useradd',
+                               '--create-home', '--shell', '/bin/bash',
+                               info.manifest.plugins['admin_user']['username']])
 
 
 class PasswordlessSudo(Task):
@@ -73,10 +73,10 @@ class AdminUserPassword(Task):
 
     @classmethod
     def run(cls, info):
-        from bootstrapvz.common.tools import log_check_call
-        log_check_call(['chroot', info.root, 'chpasswd'],
-                       info.manifest.plugins['admin_user']['username'] +
-                       ':' + info.manifest.plugins['admin_user']['password'])
+        from bootstrapvz.common.tools import log_check_call_chroot
+        log_check_call_chroot(['chroot', info.root, 'chpasswd'],
+                              info.manifest.plugins['admin_user']['username'] +
+                              ':' + info.manifest.plugins['admin_user']['password'])
 
 
 class AdminUserPublicKey(Task):
@@ -122,9 +122,9 @@ class AdminUserPublicKey(Task):
 
         # Set the owner of the authorized keys file
         # (must be through chroot, the host system doesn't know about the user)
-        from bootstrapvz.common.tools import log_check_call
-        log_check_call(['chroot', info.root,
-                        'chown', '-R', (username + ':' + username), ssh_dir_rel])
+        from bootstrapvz.common.tools import log_check_call_chroot
+        log_check_call_chroot(['chroot', info.root,
+                               'chown', '-R', (username + ':' + username), ssh_dir_rel])
 
 
 class AdminUserPublicKeyEC2(Task):

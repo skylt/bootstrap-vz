@@ -1,7 +1,7 @@
 from bootstrapvz.base import Task
 from .. import phases
 import apt
-from ..tools import log_check_call
+from ..tools import log_check_call_chroot
 
 
 class AddManifestPackages(Task):
@@ -41,17 +41,16 @@ class InstallPackages(Task):
     @classmethod
     def install_remote(cls, info, remote_packages):
         import os
-        from ..tools import log_check_call
         from subprocess import CalledProcessError
         try:
             env = os.environ.copy()
             env['DEBIAN_FRONTEND'] = 'noninteractive'
-            log_check_call(['chroot', info.root,
-                            'apt-get', 'install',
-                                       '--no-install-recommends',
-                                       '--assume-yes'] +
-                           map(str, remote_packages),
-                           env=env)
+            log_check_call_chroot(['chroot', info.root,
+                                   'apt-get', 'install',
+                                              '--no-install-recommends',
+                                              '--assume-yes'] +
+                                  map(str, remote_packages),
+                                  env=env)
         except CalledProcessError as e:
             import logging
             disk_stat = os.statvfs(info.root)
@@ -90,9 +89,9 @@ class InstallPackages(Task):
 
         env = os.environ.copy()
         env['DEBIAN_FRONTEND'] = 'noninteractive'
-        log_check_call(['chroot', info.root,
-                        'dpkg', '--install'] + chrooted_package_paths,
-                       env=env)
+        log_check_call_chroot(['chroot', info.root,
+                               'dpkg', '--install'] + chrooted_package_paths,
+                              env=env)
 
         for path in absolute_package_paths:
             os.remove(path)
@@ -106,6 +105,6 @@ class AddTaskselStandardPackages(Task):
 
     @classmethod
     def run(cls, info):
-        tasksel_packages = log_check_call(['chroot', info.root, 'tasksel', '--task-packages', 'standard'])
+        tasksel_packages = log_check_call_chroot(['chroot', info.root, 'tasksel', '--task-packages', 'standard'])
         for pkg in tasksel_packages:
             info.packages.add(pkg)

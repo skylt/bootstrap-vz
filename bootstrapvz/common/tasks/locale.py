@@ -21,7 +21,7 @@ class GenerateLocale(Task):
     @classmethod
     def run(cls, info):
         from ..tools import sed_i
-        from ..tools import log_check_call
+        from ..tools import log_check_call_chroot
 
         lang = '{locale}.{charmap}'.format(locale=info.manifest.system['locale'],
                                            charmap=info.manifest.system['charmap'])
@@ -32,9 +32,9 @@ class GenerateLocale(Task):
         locale_gen = os.path.join(info.root, 'etc/locale.gen')
         sed_i(locale_gen, search, locale_str)
 
-        log_check_call(['chroot', info.root, 'locale-gen'])
-        log_check_call(['chroot', info.root,
-                        'update-locale', 'LANG=' + lang])
+        log_check_call_chroot(['chroot', info.root, 'locale-gen'])
+        log_check_call_chroot(['chroot', info.root,
+                               'update-locale', 'LANG=' + lang])
 
 
 class SetTimezone(Task):

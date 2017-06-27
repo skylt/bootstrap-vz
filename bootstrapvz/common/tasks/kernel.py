@@ -22,9 +22,9 @@ class UpdateInitramfs(Task):
 
     @classmethod
     def run(cls, info):
-        from bootstrapvz.common.tools import log_check_call
+        from bootstrapvz.common.tools import log_check_call_chroot
         # Update initramfs (-u) for all currently installed kernel versions (-k all)
-        log_check_call(['chroot', info.root, 'update-initramfs', '-u', '-k', 'all'])
+        log_check_call_chroot(['chroot', info.root, 'update-initramfs', '-u', '-k', 'all'])
 
 
 class DetermineKernelVersion(Task):
