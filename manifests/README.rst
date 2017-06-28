@@ -276,7 +276,7 @@ boot, root and swap.
 
 -  ``backing``: Specifies the volume backing. This setting is very
    provider specific.
-   Valid values: ``ebs``, ``s3``, ``vmdk``, ``vdi``, ``raw``
+   Valid values: ``ebs``, ``s3``, ``vmdk``, ``vdi``, ``raw``, ``qcow2``, ``lvm``
    ``required``
 -  ``partitions``: A map of the partitions that should be created on
    the volume.
@@ -312,7 +312,7 @@ boot, root and swap.
    -  ``noexec``
    -  ``journal_ioprio=3``
 
-   The default command used by boostrap-vz is
+   The default command used by bootstrap-vz is
    ``['mkfs.{fs}', '{device_path}']``.
 
    -  ``boot``: Configuration of the boot partition. All settings equal 
