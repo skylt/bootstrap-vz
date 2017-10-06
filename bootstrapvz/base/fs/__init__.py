@@ -36,7 +36,7 @@ def load_volume(data, bootloader):
                       'ebs': EBSVolume,
                       'folder': Folder,
                       'lvm': LogicalVolume,
-                      'qcow2': Qcow2Volume
+                      'qcow2': Qcow2Volume,
                       'rbd': RbdVolume
                       }.get(data['backing'])
 
